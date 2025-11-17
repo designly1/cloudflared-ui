@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Save, RotateCw } from 'lucide-react'
-import { api, type Config } from '../api/client'
+import { api, type Config, type ApiResponse } from '../api/client'
 import './ConfigEditor.css'
 
 export default function ConfigEditor() {
@@ -11,15 +11,17 @@ export default function ConfigEditor() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   // Fetch config
-  const { data: configData, isLoading } = useQuery({
+  const { data: configData, isLoading } = useQuery<ApiResponse<Config>>({
     queryKey: ['config'],
     queryFn: api.getConfig,
-    onSuccess: (data) => {
-      if (data.data) {
-        setConfigText(JSON.stringify(data.data, null, 2))
-      }
-    },
   })
+
+  // Update config text when data loads
+  useEffect(() => {
+    if (configData?.data) {
+      setConfigText(JSON.stringify(configData.data, null, 2))
+    }
+  }, [configData])
 
   // Update config mutation
   const updateMutation = useMutation({
@@ -27,17 +29,21 @@ export default function ConfigEditor() {
       const result = await api.updateConfig(config)
       return result
     },
-    onSuccess: () => {
+  })
+
+  // Handle mutation success/error
+  useEffect(() => {
+    if (updateMutation.isSuccess) {
       queryClient.invalidateQueries({ queryKey: ['config'] })
       setSuccessMessage('Configuration updated successfully')
       setError(null)
       setTimeout(() => setSuccessMessage(null), 3000)
-    },
-    onError: (err: Error) => {
-      setError(err.message)
+    }
+    if (updateMutation.isError) {
+      setError(updateMutation.error?.message || 'Failed to update configuration')
       setSuccessMessage(null)
-    },
-  })
+    }
+  }, [updateMutation.isSuccess, updateMutation.isError, updateMutation.error, queryClient])
 
   const handleSave = () => {
     try {

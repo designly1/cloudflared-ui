@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../api/client'
 import ServiceControls from './ServiceControls'
@@ -18,24 +19,22 @@ export default function Dashboard() {
   // Service control mutations
   const startMutation = useMutation({
     mutationFn: api.startService,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['service-status'] })
-    },
   })
 
   const stopMutation = useMutation({
     mutationFn: api.stopService,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['service-status'] })
-    },
   })
 
   const restartMutation = useMutation({
     mutationFn: api.restartService,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['service-status'] })
-    },
   })
+
+  // Invalidate queries on successful mutations
+  useEffect(() => {
+    if (startMutation.isSuccess || stopMutation.isSuccess || restartMutation.isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['service-status'] })
+    }
+  }, [startMutation.isSuccess, stopMutation.isSuccess, restartMutation.isSuccess, queryClient])
 
   const status = statusData?.data
 
