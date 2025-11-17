@@ -1,5 +1,11 @@
 # Cloudflared GUI
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Go Version](https://img.shields.io/badge/go-%3E%3D1.23-blue.svg)](https://golang.org/)
+[![Repository](https://img.shields.io/badge/github-designly1%2Fcloudflared--ui-blue.svg)](https://github.com/designly1/cloudflared-ui)
+[![Homepage](https://img.shields.io/badge/homepage-cloudflare--ui.yaa.bz-blue.svg)](https://cloudflare-ui.yaa.bz)
+
 A modern web-based GUI for managing cloudflared service on Linux systems. Built with Go backend and React frontend in a Turborepo monorepo structure.
 
 ## Features
