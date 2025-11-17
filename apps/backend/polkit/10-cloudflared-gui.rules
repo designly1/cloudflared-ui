@@ -1,0 +1,23 @@
+// PolicyKit rule to allow specific users to control cloudflared.service
+// without root password
+//
+// Place this file in: /etc/polkit-1/rules.d/10-cloudflared-gui.rules
+//
+// After placing, reload polkit:
+// sudo systemctl restart polkit
+
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.systemd1.manage-units" &&
+        action.lookup("unit") == "cloudflared.service" &&
+        subject.isInGroup("cloudflared-admin")) {
+        return polkit.Result.YES;
+    }
+});
+
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.systemd1.reload-daemon" &&
+        subject.isInGroup("cloudflared-admin")) {
+        return polkit.Result.YES;
+    }
+});
+

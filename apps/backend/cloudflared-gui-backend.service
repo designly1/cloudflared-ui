@@ -1,0 +1,25 @@
+[Unit]
+Description=Cloudflared GUI Backend Service
+After=network.target cloudflared.service
+Wants=cloudflared.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/cloudflared-gui/backend
+ExecStart=/opt/cloudflared-gui/backend/server
+Restart=on-failure
+RestartSec=5s
+
+# Security settings
+NoNewPrivileges=false
+PrivateTmp=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cloudflared-gui-backend
+
+[Install]
+WantedBy=multi-user.target
+

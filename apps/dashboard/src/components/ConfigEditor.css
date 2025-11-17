@@ -1,0 +1,172 @@
+.config-editor {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.config-header {
+  margin-bottom: 1.5rem;
+}
+
+.config-header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.config-description {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.config-textarea {
+  width: 100%;
+  min-height: 400px;
+  padding: 1rem;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #1e293b;
+  resize: vertical;
+}
+
+.config-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.config-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.save-button,
+.reset-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+.save-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+}
+
+.save-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.reset-button {
+  background: white;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.reset-button:hover {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.message {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.message.error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.message.success {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.config-warning {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .config-header h3 {
+    color: #f1f5f9;
+  }
+
+  .config-textarea {
+    background: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+  }
+
+  .reset-button {
+    background: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+  }
+
+  .reset-button:hover {
+    background: #334155;
+  }
+
+  .message.error {
+    background: #7f1d1d;
+    color: #fca5a5;
+    border-color: #991b1b;
+  }
+
+  .message.success {
+    background: #14532d;
+    color: #86efac;
+    border-color: #166534;
+  }
+
+  .config-warning {
+    background: #78350f;
+    color: #fef3c7;
+    border-color: #92400e;
+  }
+}
+
+@media (max-width: 768px) {
+  .config-textarea {
+    min-height: 300px;
+    font-size: 0.85rem;
+  }
+
+  .config-actions {
+    flex-direction: column;
+  }
+
+  .save-button,
+  .reset-button {
+    width: 100%;
+  }
+}
+

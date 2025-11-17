@@ -1,0 +1,31 @@
+node_modules
+npm-debug.log
+.env*.local
+dist
+build
+.turbo
+.next
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+!README.md
+
+# Test files
+*_test.go
+*.test
+coverage
+
