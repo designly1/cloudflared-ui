@@ -18,7 +18,7 @@ type ServiceStatus struct {
 // Status retrieves the current status of the cloudflared service
 func (s *SystemdService) Status() (*ServiceStatus, error) {
 	ctx := context.Background()
-	props, err := s.conn.GetUnitPropertiesContext(ctx, serviceName)
+	props, err := s.conn.GetUnitPropertiesContext(ctx, s.serviceName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get unit properties: %w", err)
 	}

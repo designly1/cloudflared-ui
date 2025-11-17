@@ -25,7 +25,7 @@ func (s *SystemdService) StreamLogs(ctx context.Context, writer io.Writer, follo
 	defer journal.Close()
 
 	// Add match for cloudflared service
-	if err := journal.AddMatch("_SYSTEMD_UNIT=" + serviceName); err != nil {
+	if err := journal.AddMatch("_SYSTEMD_UNIT=" + s.serviceName); err != nil {
 		return fmt.Errorf("failed to add journal match: %w", err)
 	}
 
@@ -90,7 +90,7 @@ func (s *SystemdService) GetRecentLogs(count int) ([]LogEntry, error) {
 	defer journal.Close()
 
 	// Add match for cloudflared service
-	if err := journal.AddMatch("_SYSTEMD_UNIT=" + serviceName); err != nil {
+	if err := journal.AddMatch("_SYSTEMD_UNIT=" + s.serviceName); err != nil {
 		return nil, fmt.Errorf("failed to add journal match: %w", err)
 	}
 

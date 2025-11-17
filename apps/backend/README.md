@@ -51,10 +51,24 @@ docker build -t cloudflared-gui-backend .
 
 ## Configuration
 
-Environment variables:
+Environment variables (all optional with defaults):
 
-- `PORT` - Server port (default: 8080)
-- `HOST` - Server host (default: 127.0.0.1)
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `HOST` | `127.0.0.1` | Server host address |
+| `PORT` | `8080` | Server port |
+| `CLOUDFLARED_SERVICE_NAME` | `cloudflared.service` | Systemd service name to manage |
+| `CLOUDFLARED_CONFIG_PATH` | `/etc/cloudflared/config.yml` | Path to cloudflared config file |
+
+Example:
+
+```bash
+export HOST=127.0.0.1
+export PORT=8080
+export CLOUDFLARED_SERVICE_NAME=cloudflared.service
+export CLOUDFLARED_CONFIG_PATH=/etc/cloudflared/config.yml
+go run ./cmd/server
+```
 
 ## Systemd Integration
 

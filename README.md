@@ -171,17 +171,68 @@ Note: The container needs access to the host's D-Bus socket to control systemd s
 
 ## Configuration
 
-### Backend Configuration
+### Environment Variables
 
-The backend listens on `127.0.0.1:8080` by default. To change this, modify `apps/backend/cmd/server/main.go`:
+The backend can be configured using environment variables. All variables are optional and have sensible defaults:
 
-```go
-addr := "127.0.0.1:8080"  // Change this line
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `HOST` | `127.0.0.1` | Backend server host address |
+| `PORT` | `8080` | Backend server port |
+| `CLOUDFLARED_SERVICE_NAME` | `cloudflared.service` | Systemd service name to manage |
+| `CLOUDFLARED_CONFIG_PATH` | `/etc/cloudflared/config.yml` | Path to cloudflared configuration file |
+
+### Setting Environment Variables
+
+#### Development
+
+Create a `.env` file in the project root or export variables:
+
+```bash
+export HOST=127.0.0.1
+export PORT=8080
+export CLOUDFLARED_SERVICE_NAME=cloudflared.service
+export CLOUDFLARED_CONFIG_PATH=/etc/cloudflared/config.yml
 ```
 
-### Cloudflared Config Path
+#### Production (Systemd)
 
-By default, the backend reads/writes cloudflared config at `/etc/cloudflared/config.yml`. This can be changed in `apps/backend/internal/config/config.go`.
+Edit the systemd service file to include environment variables:
+
+```ini
+[Service]
+Environment="HOST=127.0.0.1"
+Environment="PORT=8080"
+Environment="CLOUDFLARED_SERVICE_NAME=cloudflared.service"
+Environment="CLOUDFLARED_CONFIG_PATH=/etc/cloudflared/config.yml"
+```
+
+Or use a systemd environment file:
+
+```bash
+# Create /etc/cloudflared-gui/env
+HOST=127.0.0.1
+PORT=8080
+CLOUDFLARED_SERVICE_NAME=cloudflared.service
+CLOUDFLARED_CONFIG_PATH=/etc/cloudflared/config.yml
+
+# Update systemd service
+[Service]
+EnvironmentFile=/etc/cloudflared-gui/env
+```
+
+#### Docker
+
+```bash
+docker run -d \
+  --name cloudflared-gui-backend \
+  --network host \
+  -e HOST=127.0.0.1 \
+  -e PORT=8080 \
+  -e CLOUDFLARED_SERVICE_NAME=cloudflared.service \
+  -e CLOUDFLARED_CONFIG_PATH=/etc/cloudflared/config.yml \
+  cloudflared-gui-backend
+```
 
 ### CORS Configuration
 
@@ -191,7 +242,7 @@ For production, update CORS settings in `apps/backend/internal/api/router.go` to
 
 ### Binding to Localhost
 
-By default, the backend binds to `127.0.0.1` (localhost only). This prevents external access without additional configuration.
+By default, the backend binds to `127.0.0.1` (localhost only) via the `HOST` environment variable. This prevents external access without additional configuration. To allow external access, set `HOST=0.0.0.0` (not recommended without proper security measures).
 
 ### Exposing the UI Securely
 

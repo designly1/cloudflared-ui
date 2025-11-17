@@ -3,14 +3,22 @@ package systemd
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/coreos/go-systemd/v22/dbus"
 )
 
-const serviceName = "cloudflared.service"
+// GetServiceName returns the systemd service name from environment or default
+func GetServiceName() string {
+	if name := os.Getenv("CLOUDFLARED_SERVICE_NAME"); name != "" {
+		return name
+	}
+	return "cloudflared.service"
+}
 
 type SystemdService struct {
-	conn *dbus.Conn
+	conn        *dbus.Conn
+	serviceName string
 }
 
 // New creates a new SystemdService with a system D-Bus connection
@@ -19,7 +27,10 @@ func New() (*SystemdService, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to system D-Bus: %w", err)
 	}
-	return &SystemdService{conn: conn}, nil
+	return &SystemdService{
+		conn:        conn,
+		serviceName: GetServiceName(),
+	}, nil
 }
 
 // Close closes the D-Bus connection
@@ -33,7 +44,7 @@ func (s *SystemdService) Close() {
 func (s *SystemdService) Start() error {
 	ctx := context.Background()
 	responseChan := make(chan string)
-	_, err := s.conn.StartUnitContext(ctx, serviceName, "replace", responseChan)
+	_, err := s.conn.StartUnitContext(ctx, s.serviceName, "replace", responseChan)
 	if err != nil {
 		return fmt.Errorf("failed to start service: %w", err)
 	}
@@ -50,7 +61,7 @@ func (s *SystemdService) Start() error {
 func (s *SystemdService) Stop() error {
 	ctx := context.Background()
 	responseChan := make(chan string)
-	_, err := s.conn.StopUnitContext(ctx, serviceName, "replace", responseChan)
+	_, err := s.conn.StopUnitContext(ctx, s.serviceName, "replace", responseChan)
 	if err != nil {
 		return fmt.Errorf("failed to stop service: %w", err)
 	}
@@ -67,7 +78,7 @@ func (s *SystemdService) Stop() error {
 func (s *SystemdService) Restart() error {
 	ctx := context.Background()
 	responseChan := make(chan string)
-	_, err := s.conn.RestartUnitContext(ctx, serviceName, "replace", responseChan)
+	_, err := s.conn.RestartUnitContext(ctx, s.serviceName, "replace", responseChan)
 	if err != nil {
 		return fmt.Errorf("failed to restart service: %w", err)
 	}

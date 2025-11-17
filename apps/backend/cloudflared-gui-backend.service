@@ -11,6 +11,13 @@ ExecStart=/opt/cloudflared-gui/backend/server
 Restart=on-failure
 RestartSec=5s
 
+# Environment variables (optional - defaults shown)
+# Uncomment and modify as needed:
+# Environment="HOST=127.0.0.1"
+# Environment="PORT=8080"
+# Environment="CLOUDFLARED_SERVICE_NAME=cloudflared.service"
+# Environment="CLOUDFLARED_CONFIG_PATH=/etc/cloudflared/config.yml"
+
 # Security settings
 NoNewPrivileges=false
 PrivateTmp=true

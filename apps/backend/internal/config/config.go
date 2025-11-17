@@ -7,7 +7,13 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const defaultConfigPath = "/etc/cloudflared/config.yml"
+// GetConfigPath returns the cloudflared config path from environment or default
+func GetConfigPath() string {
+	if path := os.Getenv("CLOUDFLARED_CONFIG_PATH"); path != "" {
+		return path
+	}
+	return "/etc/cloudflared/config.yml"
+}
 
 // Config represents the cloudflared configuration structure
 type Config struct {
@@ -28,7 +34,7 @@ type IngressRule struct {
 // ReadConfig reads the cloudflared configuration from the specified path
 func ReadConfig(path string) (*Config, error) {
 	if path == "" {
-		path = defaultConfigPath
+		path = GetConfigPath()
 	}
 
 	data, err := os.ReadFile(path)
@@ -47,7 +53,7 @@ func ReadConfig(path string) (*Config, error) {
 // WriteConfig writes the cloudflared configuration to the specified path
 func WriteConfig(path string, config *Config) error {
 	if path == "" {
-		path = defaultConfigPath
+		path = GetConfigPath()
 	}
 
 	data, err := yaml.Marshal(config)
